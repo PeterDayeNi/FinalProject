@@ -43,16 +43,50 @@ var bubbles = {
   x: 600,
   y: 200,
   size: 20,
-  speed: 5
+  speed: 5,
+  speedincrease:0.5
 }
 
+var bubbles2 = {
+  x: 5000,
+  y: 100,
+  size: 10,
+}
+
+var bubbles3 = {
+  x: 5000,
+  y: 300,
+  size: 15,
+}
+
+var hugebubbles = {
+  x: 1000,
+  y: 200,
+  size: 200,
+  speed: 3
+}
+
+function preload() {
+  soundFormats('mp3', 'wav', 'ogg');
+  Boom = loadSound('Boom.wav');
+  Gameover = loadSound('Gameover.wav');
+  Fire = loadSound('Fire.wav');
+  Opening = loadSound('Opening.mp3');
+  Background = loadSound('Background.mp3');
+}
 
 function setup() {
   createCanvas(600, 400);
+  Background.play();
+  
 }
 
 function draw() {
   background(0);
+  
+  //textAlign(CENTER, CENTER);
+  //rotate(PI/4);
+  //text("Test", -width/2, height/2, width, height*10);
   
   //Draw the Countdown
   noStroke();
@@ -154,6 +188,7 @@ function draw() {
     bomb.num -= 1;
     bomb.x = killer.x;
     bomb.y = killer.y;
+    Fire.play()
   }
 
   if (bomb.fire == 1) {
@@ -161,9 +196,23 @@ function draw() {
     bomb.x = bomb.x + bomb.speed;
   }
   
+  if (bomb.x > 610) {
+    bomb.y = 0;
+  }
+  
   //Draw the Bubbles 
   ellipse(bubbles.x, bubbles.y, bubbles.size);
   bubbles.x -= bubbles.speed;
+  
+  if (Score > 150){
+  ellipse(bubbles2.x, bubbles2.y, bubbles2.size)
+  bubbles2.x -= bubbles.speed; 
+  }
+  
+  if (Score > 75){
+  ellipse(bubbles3.x, bubbles3.y, bubbles3.size)
+  bubbles3.x -= bubbles.speed; 
+  }
   
   //Draw the bullets and kill the bubbles
   
@@ -172,6 +221,8 @@ function draw() {
   // rect(bullets.x, bullets.y2, 5, 1);
   // bullets.x += bullets.speed;
   
+  //Instructor helped me to write the following bullets part code
+  
   var bullet = {
     x: killer.x - 5,
     y1: killer.y - 7,
@@ -179,9 +230,9 @@ function draw() {
     speed: 8,
   }
   
-  if (frameCount % 5 == 0) {
+  if (frameCount % 4 == 0) {
     bullets.unshift(bullet);
-    bullets = bullets.slice(0, 100);
+    bullets = bullets.slice(0, 60);
   }
   
   for (var i = 0; i < bullets.length; i++) {
@@ -191,15 +242,39 @@ function draw() {
     rect(bullet.x, bullet.y2, 5, 1);
     bullet.x += bullet.speed;
     
-    if (dist(bullet.x, bullet.y1, bubbles.x, bubbles.y) < 10) {
+    if (dist(bullet.x, bullet.y1, bubbles.x, bubbles.y) < 12) {
     bubbles.x = random(590, 600);
     bubbles.y = random(60, 340);
     Score ++;
     }
     
-    if (dist(bullet.x, bullet.y2, bubbles.x, bubbles.y) < 10) {
+    if (dist(bullet.x, bullet.y2, bubbles.x, bubbles.y) < 12) {
     bubbles.x = random(590, 600);
     bubbles.y = random(60, 340);
+    Score ++;
+    }
+    
+    if (dist(bullet.x, bullet.y1, bubbles2.x, bubbles2.y) < 8) {
+    bubbles2.x = random(590, 600);
+    bubbles2.y = random(60, 340);
+    Score ++;
+    }
+    
+    if (dist(bullet.x, bullet.y2, bubbles2.x, bubbles2.y) < 8) {
+    bubbles2.x = random(590, 600);
+    bubbles2.y = random(60, 340);
+    Score ++;
+    }
+    
+    if (dist(bullet.x, bullet.y1, bubbles3.x, bubbles3.y) < 10) {
+    bubbles2.x = random(590, 600);
+    bubbles2.y = random(60, 340);
+    Score ++;
+    }
+    
+    if (dist(bullet.x, bullet.y2, bubbles3.x, bubbles3.y) < 10) {
+    bubbles3.x = random(590, 600);
+    bubbles3.y = random(60, 340);
     Score ++;
     }
   
@@ -208,59 +283,45 @@ function draw() {
   //Level up
   
   //if(Score % 10 == 0 && Score > 0){
-  //  bubbles.speed += 0.1; 
+  //  bubbles.speed += 0.25; 
   //}
-  
-  if (Score == 5){
-    bubbles.speed = 0.5
-  }
-  
+  //
+  // Need to improve
+  //
+  //if(Score % 5 == 0 && Score > 0){
+  //  bubbles.speed += bubbles.speedincrease
+  //}
+    
   if (Score == 10){
-    bubbles.speed = 0.75
-  }
-  
-  if (Score == 15){
-    bubbles.speed = 1
+    bubbles.speed = 5.5
   }
   
   if (Score == 20){
-    bubbles.speed = 1.25
-  }
-  
-  if (Score == 25){
-    bubbles.speed = 1.5
+    bubbles.speed = 6
   }
   
   if (Score == 30){
-    bubbles.speed = 1.75
-  }
-  
-  if (Score == 35){
-    bubbles.speed = 2
+    bubbles.speed = 6.5
   }
   
   if (Score == 40){
-    bubbles.spped = 2.25
-  }
-  
-  if (Score == 45){
-    bubbles.spped = 2.5
+    bubbles.speed = 7
   }
   
   if (Score == 50){
-    bubbles.spped = 2.75
-  }
-  
-  if (Score == 55){
-    bubbles.spped = 3
+    bubbles.speed = 7.5
   }
   
   if (Score == 60){
-    bubbles.spped = 3.25
+    bubbles.speed = 8
   }
   
-  if (Score == 65){
-    bubbles.spped = 3.5
+  if (Score == 70){
+    bubbles.speed = 8.5
+  }
+  
+  if (Score == 80){
+    bubbles.speed = 9
   }
   
     
@@ -271,10 +332,73 @@ function draw() {
     bubbles.y = random(60, 340);
   }
   
-  //Game Over
-  if (HP <= 0){
-    background(0)
+  if (bubbles2.x < 0){
+    HP -= 1
+    bubbles2.x = random(590, 600);
+    bubbles2.y = random(60, 340);
   }
   
+  if (bubbles3.x < 0){
+    HP -= 1
+    bubbles3.x = random(590, 600);
+    bubbles3.y = random(60, 340);
+  }
+  
+  //Cheat Mode
+  //Win
+  if (keyIsDown(49)){
+    Score += 50
+  }
+  
+  //Lose
+  if (keyIsDown(50)){
+    HP -= 1
+  }
+  
+  //Ending
+  if (Score > 800 && HP > 0){
+    bubbles.x = 5000
+    bubbles2.x = 5000    
+    bubbles3.x = 5000
+    bubbles.speed = 0
+    ellipse(hugebubbles.x, hugebubbles.y, hugebubbles.size)
+    hugebubbles.x -= hugebubbles.speed
+  }
+  
+  
+  //Game Over
+  if (hugebubbles.x < 150 || dist(killer.x, killer.y, hugebubbles.x, hugebubbles.y) < 150 || dist(killer.x, killer.y, bubbles.x, bubbles.y) < 20 || dist(killer.x, killer.y, bubbles2.x, bubbles2.y) < 15 || dist(killer.x, killer.y, bubbles3.x, bubbles3.y) < 18) {
+    HP -= 3
+  }
+  
+  if (HP <= 0){
+    Background.stop();
+    Gameover.play()
+    background(0);
+    textAlign(CENTER, CENTER);
+    textSize(80);
+    text("Game Over", 300, 100);
+    textSize(20);
+    text("Thanks for what you did!", 300, 200);
+    text("But the you didn't kill all the bubbles.", 300, 240);
+    text("Good Luck, Pilot.", 300, 280);
+    noLoop()
+  }
+  
+  //Win
+  if (dist(bomb.x, bomb.y, hugebubbles.x, hugebubbles.y) < 100){
+    Boom.play()
+    hugebubbles.speed = 0
+    bomb.speed = 0
+    background(0);
+    textAlign(CENTER, CENTER);
+    textSize(80);
+    text("Thank You!", 300, 100);
+    textSize(20);
+    text("You didn't survive the explosion.", 300, 200);
+    text("But you cleared all the bubbles", 300, 240)
+    text("People will remember you are a hero.", 300, 280);
+    noLoop()
+  }
   
 }
