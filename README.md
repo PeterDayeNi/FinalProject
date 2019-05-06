@@ -53,6 +53,10 @@ What did you do in each of the past four weeks?
 
 Still having trouble in using for loop and group
 
+Video upload failed
+
+Star War opening text failed
+
 ## Completed Work
 
 https://editor.p5js.org/PeterDayeNi/sketches/pyr-SObl4
